@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 openai = "^1.37.1"
 python-dotenv = "^1.0.1"
+discord = "^2.3.2"
 
 
 [build-system]
