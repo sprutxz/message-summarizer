@@ -45,7 +45,7 @@ class Commands(commands.Cog):
                 
         
         prompt = f"""
-        I need you to summarize the chat history for me.
+        I need you to summarize the provided chat history for me.
 
         Guidelines:
         * Keep the summary concise and informative.
@@ -53,6 +53,27 @@ class Commands(commands.Cog):
         * Maintain a neutral tone.
         * Use bullet points.
         * Always use the name of the user instead of terms vague terms such as "User", "One".
+        
+        Format:
+        I want you to use the follow format when generating the summary:
+        ### Chat Summary
+        - Discussion point 1
+            - Sub-point 1
+            - Sub-point 2
+        - Discussion point 2
+            - Sub-point 1
+            - Sub-point 2
+        
+        Here's an example of how you should structure the summary:
+        ### Chat Summary
+        - Discussion on Lex Fridman:
+            - Sprutz and Skittles2821 discuss Lex Fridman, noting his popularity among various followers, including gamers.
+            - Skittles2821 mentions that Fridman runs a podcast featuring guests from diverse fields.
+            - Sprutz expresses surprise at the range of Fridman's podcast topics.
+
+        - Adrian's Experience in Toronto:
+            - Adrian describes a recent trip to Toronto, where he engaged in various activities, including consuming drugs.
+            - Veer plans to visit Toronto for a wedding, anticipating a lively atmosphere contrasting Adrian's experience.
 
         Chat History:
         {summary}
