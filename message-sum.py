@@ -43,41 +43,11 @@ class Commands(commands.Cog):
             if message is not None:
                 summary += f"{message[0]}: {message[1]}\n"
                 
+        with open("prompt.txt", "r") as f:
+            prompt = f.read()
         
-        prompt = f"""
-        I need you to summarize the provided chat history for me.
+        prompt += summary
 
-        Guidelines:
-        * Keep the summary concise and informative.
-        * Highlight key points that were discussed.
-        * Maintain a neutral tone.
-        * Use bullet points.
-        * Always use the name of the user instead of terms vague terms such as "User", "One".
-        
-        Format:
-        I want you to use the follow format when generating the summary:
-        ### Chat Summary
-        - Discussion point 1
-            - Sub-point 1
-            - Sub-point 2
-        - Discussion point 2
-            - Sub-point 1
-            - Sub-point 2
-        
-        Here's an example of how you should structure the summary:
-        ### Chat Summary
-        - Discussion on Lex Fridman:
-            - Sprutz and Skittles2821 discuss Lex Fridman, noting his popularity among various followers, including gamers.
-            - Skittles2821 mentions that Fridman runs a podcast featuring guests from diverse fields.
-            - Sprutz expresses surprise at the range of Fridman's podcast topics.
-
-        - Adrian's Experience in Toronto:
-            - Adrian describes a recent trip to Toronto, where he engaged in various activities, including consuming drugs.
-            - Veer plans to visit Toronto for a wedding, anticipating a lively atmosphere contrasting Adrian's experience.
-
-        Chat History:
-        {summary}
-        """.strip()
         
         completion = client.chat.completions.create(model="gpt-4o-mini",
                                                     messages=[
