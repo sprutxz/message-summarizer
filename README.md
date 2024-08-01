@@ -1,0 +1,1 @@
+A discord bot that sunmmarizes the messages sent in the chat on request
