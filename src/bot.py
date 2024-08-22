@@ -1,12 +1,13 @@
 from discord.ext import commands
 from openai import OpenAI
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
 client = OpenAI()
 
-bot_user_id = "1267862691905536073"
+bot_user_id = os.getenv("BOT_USER_ID")
 
 class MyBot(commands.Bot):
     def __init__(self, command_prefix, intents):

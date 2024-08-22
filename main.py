@@ -12,7 +12,7 @@ token = os.getenv("DISCORD_TOKEN")
 #setting up the intents
 intents = discord.Intents.default()
 intents.message_content = True
-bot = MyBot(command_prefix='?', intents=intents)
+bot = MyBot(command_prefix='>', intents=intents)
     
 # Adding the Cog
 async def main():
