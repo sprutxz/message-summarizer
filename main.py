@@ -7,7 +7,7 @@ from src.bot import MyBot
 
 # Load environment variables from .env file
 load_dotenv()
-token = os.getenv("TESTING_BOT_TOKEN")
+token = os.getenv("DISCORD_TOKEN")
 
 #setting up the intents
 intents = discord.Intents.default()
