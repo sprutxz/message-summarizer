@@ -9,7 +9,7 @@ class Commands(commands.Cog):
         
         summary = await self.bot.retrieve_messages(ctx, limit, include_bot_messages=False)
                 
-        with open("summarize_prompt.txt", "r") as f:
+        with open("resources/summarize_prompt.txt", "r") as f:
             prompt = f.read()
         
         prompt += summary

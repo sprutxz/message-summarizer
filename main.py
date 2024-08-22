@@ -2,12 +2,12 @@ import discord
 import asyncio
 from dotenv import load_dotenv
 import os
-from commands import Commands
-from bot import MyBot
+from src.commands import Commands
+from src.bot import MyBot
 
 # Load environment variables from .env file
 load_dotenv()
-token = os.getenv("DISCORD_TOKEN")
+token = os.getenv("TESTING_BOT_TOKEN")
 
 #setting up the intents
 intents = discord.Intents.default()

@@ -48,13 +48,13 @@ class MyBot(commands.Bot):
         if self.user.mentioned_in(message):
             history = await self.retrieve_messages(message)
             
-            with open("chat_prompt.txt", "r") as f:
+            with open("resources/chat_prompt.txt", "r") as f:
                 prompt = f.read()
             
             prompt += history
             
             prompt += f"\nQuestion posed: {message.content}"
             
-            completion = self.complete_message(prompt)
+            completion = await self.complete_message(prompt)
             
             await message.channel.send(completion)
