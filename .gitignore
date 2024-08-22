@@ -1,3 +1,4 @@
-/.env
-/*.txt
+resources/
+__pycache__
+.env
 /test.py
