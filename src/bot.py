@@ -7,7 +7,7 @@ load_dotenv()
 
 client = OpenAI()
 
-bot_user_id = os.getenv("BOT_USER_ID")
+bot_user_id = os.getenv("BOT_USR_ID")
 
 class MyBot(commands.Bot):
     def __init__(self, command_prefix, intents):
@@ -34,7 +34,7 @@ class MyBot(commands.Bot):
         for message in message_history:
             if message is not None:
                 summary += f"{message[0]}: {message[1]}\n"
-        
+        print("Summary retrieved")
         return summary
     
     async def complete_message(self, prompt, model = "gpt-4o-mini"):
@@ -59,6 +59,7 @@ class MyBot(commands.Bot):
             
             prompt += f"\nQuestion posed: {message.content}"
             
+            print("sending prompt to openAI")
             completion = await self.complete_message(prompt, model="gpt-4o")
             
             await message.channel.send(completion)
