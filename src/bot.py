@@ -37,8 +37,8 @@ class MyBot(commands.Bot):
         
         return summary
     
-    async def complete_message(self, prompt):
-        completion = client.chat.completions.create(model="gpt-4o-mini",
+    async def complete_message(self, prompt, model = "gpt-4o-mini"):
+        completion = client.chat.completions.create(model=model,
                                                     messages=[
                                                         {"role": "user", "content": prompt}
                                                     ]
@@ -59,6 +59,6 @@ class MyBot(commands.Bot):
             
             prompt += f"\nQuestion posed: {message.content}"
             
-            completion = await self.complete_message(prompt)
+            completion = await self.complete_message(prompt, model="gpt-4o")
             
             await message.channel.send(completion)
