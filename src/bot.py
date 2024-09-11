@@ -25,7 +25,7 @@ class MyBot(commands.Bot):
         message_history = [None]
         async for message in messages:
             if message.author.id != int(bot_user_id) or include_bot_messages:
-                username = message.author.global_name if message.author.global_name else message.author.username
+                username = message.author.global_name if message.author.global_name else message.author.name
                 message_history.append((username, message.content))
         
         message_history.pop(0)    
@@ -78,8 +78,7 @@ class MyBot(commands.Bot):
             prompt += history
             
             print("sending prompt to openAI")
-            
-            print(prompt)
+
             completion = await self.complete_message(sys_prompt, prompt, model="gpt-4o")
             
             await message.channel.send(completion)
