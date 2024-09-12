@@ -81,7 +81,11 @@ class MyBot(commands.Bot):
 
             completion = await self.complete_message(sys_prompt, prompt, model="gpt-4o")
             
-            await message.channel.send(completion)
+            await self.split_message_and_send(message, completion)
+    
+    async def split_message_and_send(self, message, completion):
+        for i in range (0, len(completion), 2000):
+            await message.channel.send(completion[i:i+2000])
     
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
