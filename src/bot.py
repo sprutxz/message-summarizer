@@ -87,12 +87,12 @@ class MyBot(commands.Bot):
         if len(completion) > 2000: 
             i = 0
             while i < len(completion):
-                j = i + 2000
+                j = min(i + 2000, len(completion))
                 while j > i and completion[j] != "\n":
                     j -= 1
-                
                 await message.channel.send(completion[i:j])
                 i = j
+                
         else:
             await message.channel.send(completion)
             
