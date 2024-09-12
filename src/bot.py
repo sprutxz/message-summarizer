@@ -84,8 +84,15 @@ class MyBot(commands.Bot):
             await self.split_message_and_send(message, completion)
     
     async def split_message_and_send(self, message, completion):
-        for i in range (0, len(completion), 2000):
-            await message.channel.send(completion[i:i+2000])
+        i = 0
+        while i < len(completion):
+            j = i + 2000
+            while j > i and completion[j] != "\n":
+                j -= 1
+            
+            await message.channel.send(completion[i:j])
+            i = j
+            
     
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
