@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -17,27 +18,31 @@ class MyBot(commands.Bot):
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
         
-    async def retrieve_messages(self, ctx, limit: int = 500, include_bot_messages: bool = True):
+    async def retrieve_messages(self, ctx, limit: int = 500):
         print(f"Retrieving last {limit} messages")
         
-        messages = ctx.channel.history(limit=(limit + 1))
+        messages = ctx.channel.history(limit=limit, oldest_first=True)
         
-        message_history = [None]
-        async for message in messages:
-            if message.author.id != int(bot_user_id) or include_bot_messages:
-                username = message.author.global_name if message.author.global_name else message.author.name
-                message_history.append((username, message.content))
-        
-        message_history.pop(0)    
-        message_history.reverse()
-        
+        return messages
+    
+    async def generate_message_summary(self, messages):
         summary = """"""
-        for message in message_history:
-            if message is not None:
-                summary += f"{message[0]}: {message[1]}\n"
+        async for message in messages:
+            username = message.author.global_name if message.author.global_name else message.author.name
+            summary += f"{username}: {message.content}\n"
+        
+        # deleting last line from summary
+        index = len(summary) - 1
+        for i in range(len(summary) - 2, -1, -1):
+            if summary[i] == "\n":
+                index = i
+                break
+        
+        summary = summary[:index+1]
+        
         return summary
     
-    async def complete_message(self, sys_prompt, prompt, model = "gpt-4o-mini"):
+    async def text_generation(self, sys_prompt, prompt, model = "gpt-4o-mini"):
         print("Completing message")
         completion = client.chat.completions.create(model=model,
                                                     messages=[
@@ -64,24 +69,38 @@ class MyBot(commands.Bot):
     
     async def on_message(self, message):
         await self.process_commands(message)
-        
-        if self.user.mentioned_in(message):
-            history = await self.retrieve_messages(message)
-            
-            with open("resources/bot_prompt.txt", "r") as f:
-                sys_prompt = f.read()
-            
-            prompt = f"\nrequest: {message.content}\n\n"
-            
-            prompt += "History of the conversation:\n"
-            
-            prompt += history
-            
-            print("sending prompt to openAI")
 
-            completion = await self.complete_message(sys_prompt, prompt, model="gpt-4o")
-            
-            await self.split_message_and_send(message, completion)
+        if self.user.mentioned_in(message):
+            await self.respond_to_message(message)
+        
+        else:
+            if message.channel.type == discord.ChannelType.public_thread and message.author.id != int(bot_user_id):
+                message_history = await self.retrieve_messages(message, limit = 1)
+                async for msg in message_history:
+                    if self.user.mentioned_in(msg):
+                        await self.respond_to_message(message)
+    
+    async def respond_to_message(self, message):
+        print("retreiving message history")
+        message_history = await self.retrieve_messages(message)
+        
+        print("generating message summary")
+        summary = await self.generate_message_summary(message_history)
+        
+        with open("resources/bot_prompt.txt", "r") as f:
+            sys_prompt = f.read()
+        
+        prompt = f"\nrequest: {message.content}\n\n"
+        
+        prompt += "History of the conversation:\n"
+        
+        prompt += summary
+        
+        print("sending prompt to openAI")
+
+        completion = await self.text_generation(sys_prompt, prompt, model="gpt-4o")
+        
+        await self.split_message_and_send(message, completion)
     
     async def split_message_and_send(self, message, completion):
         i = 0
@@ -100,7 +119,6 @@ class MyBot(commands.Bot):
             
             await message.channel.send(completion[i:j])
             i = j
-            
     
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):

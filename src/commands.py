@@ -16,7 +16,7 @@ class Commands(commands.Cog):
         
         prompt += summary
         
-        completion = await self.bot.complete_message(sys_prompt, prompt)
+        completion = await self.bot.text_generation(sys_prompt, prompt)
         
         await ctx.send(completion)
 
@@ -30,7 +30,7 @@ class Commands(commands.Cog):
         
         prompt = "You are a poetic assistant, skilled in explaining complex programming concepts with creative flair.\nCompose a poem that explains the concept of recursion in programming."
         
-        completion = await self.bot.complete_message(prompt)
+        completion = await self.bot.text_generation(prompt)
         
         await ctx.send(completion)
     
