@@ -1,4 +1,5 @@
 from discord.ext import commands
+from resources.prompts import summarize_prompt
 
 class Commands(commands.Cog):
     def __init__(self, bot):
@@ -7,14 +8,13 @@ class Commands(commands.Cog):
     @commands.command()
     async def summarize_chat(self, ctx, limit: int = 100):
         
-        summary = await self.bot.retrieve_messages(ctx, limit, include_bot_messages=False)
+        msg_hst = await self.bot.retrieve_messages(ctx, limit)
         
-        sys_prompt  = "You are an assistant tasked with summarizing a conversation."
+        summary = await self.bot.generate_message_summary(msg_hst)
            
-        with open("resources/summarize_prompt.txt", "r") as f:
-            prompt = f.read()
+        sys_prompt = summarize_prompt
         
-        prompt += summary
+        prompt = f"Chat History:\n{summary}"
         
         completion = await self.bot.text_generation(sys_prompt, prompt)
         
