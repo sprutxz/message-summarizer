@@ -1,1 +1,6 @@
-A discord bot that sunmmarizes the messages sent in the chat on request
+A discord chatbot that calls openAI API
+
+Features:
+* Summarize messages
+* Talk in regular conversations
+* Generate images
