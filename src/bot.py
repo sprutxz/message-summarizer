@@ -52,12 +52,12 @@ class MyBot(commands.Bot):
         
         return completion.choices[0].message.content
     
-    async def image_generation(self, prompt, model = "dall-e-3"):
+    async def image_generation(self, prompt, model = "dall-e-3", size="1024x1024", quality="standard"): 
         completion = client.images.generate(
             model=model,
             prompt=prompt,
-            size="1024x1024",
-            quality="standard",
+            size=size,
+            quality=quality,
             n=1,
         )
         
@@ -80,7 +80,7 @@ class MyBot(commands.Bot):
                     await self.respond_in_thread(message)
     
     async def respond_in_channel(self, message):
-        message_history = await self.retrieve_messages(message)
+        message_history = await self.retrieve_messages(message, limit=1)
         
         summary = await self.generate_message_summary(message_history)
         

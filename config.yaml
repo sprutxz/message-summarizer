@@ -1,0 +1,5 @@
+model:
+  msg_context_length: 150
+  chat_model: "gpt-4o"
+  summary_model: "gpt-4o-mini"
+  image_model: "dall-e-3"
